@@ -1,5 +1,5 @@
 {
-    "name": "horde/horde-stream-wrapper",
+    "name": "horde/stream-wrapper",
     "description": "Horde Stream wrappers",
     "type": "library",
     "homepage": "https://pear.horde.org",
@@ -17,7 +17,7 @@
         }
     ],
     "version": "2.1.4",
-    "time": "2016-02-02",
+    "time": "2017-10-20",
     "repositories": [
         {
             "type": "pear",
