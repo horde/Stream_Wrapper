@@ -16,7 +16,7 @@
   <email>slusarz@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-10-20</date>
+ <date>2017-10-27</date>
  <version>
   <release>2.1.4</release>
   <api>2.1.0</api>
@@ -30,6 +30,15 @@
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <dir name="doc">
+    <dir name="Horde">
+     <dir name="Stream">
+      <dir name="Wrapper">
+       <file name="CHANGES" role="doc" />
+      </dir> <!-- /doc/Horde/Stream/Wrapper -->
+     </dir> <!-- /doc/Horde/Stream -->
+    </dir> <!-- /doc/Horde -->
+   </dir> <!-- /doc -->
    <dir name="lib">
     <dir name="Horde">
      <dir name="Stream">
@@ -71,6 +80,7 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="CHANGES" name="doc/Horde/Stream/Wrapper/CHANGES" />
    <install as="Horde/Stream/Wrapper/Combine.php" name="lib/Horde/Stream/Wrapper/Combine.php" />
    <install as="Horde/Stream/Wrapper/CombineStream.php" name="lib/Horde/Stream/Wrapper/CombineStream.php" />
    <install as="Horde/Stream/Wrapper/String.php" name="lib/Horde/Stream/Wrapper/String.php" />
@@ -285,7 +295,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-10-20</date>
+   <date>2017-10-27</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
    </notes>
