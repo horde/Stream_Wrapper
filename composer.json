@@ -1,5 +1,5 @@
 {
-    "name": "horde/horde-stream-wrapper",
+    "name": "horde/stream-wrapper",
     "description": "Horde Stream wrappers",
     "type": "library",
     "homepage": "https://pear.horde.org",
