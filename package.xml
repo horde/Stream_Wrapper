@@ -60,7 +60,6 @@
        <file name="AllTests.php" role="test" />
        <file name="bootstrap.php" role="test" />
        <file name="CombineTest.php" role="test" />
-       <file name="phpunit.xml" role="test" />
        <file name="StringTest.php" role="test" />
       </dir> <!-- /test/Horde/Stream/Wrapper -->
      </dir> <!-- /test/Horde/Stream -->
@@ -91,7 +90,6 @@
    <install as="Horde/Stream/Wrapper/AllTests.php" name="test/Horde/Stream/Wrapper/AllTests.php" />
    <install as="Horde/Stream/Wrapper/bootstrap.php" name="test/Horde/Stream/Wrapper/bootstrap.php" />
    <install as="Horde/Stream/Wrapper/CombineTest.php" name="test/Horde/Stream/Wrapper/CombineTest.php" />
-   <install as="Horde/Stream/Wrapper/phpunit.xml" name="test/Horde/Stream/Wrapper/phpunit.xml" />
    <install as="Horde/Stream/Wrapper/StringTest.php" name="test/Horde/Stream/Wrapper/StringTest.php" />
   </filelist>
  </phprelease>
