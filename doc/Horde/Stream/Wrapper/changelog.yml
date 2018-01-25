@@ -8,7 +8,9 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes:
+  notes: |+
+    [jan] Fix deprecation warnings in PHP 7.2.
+    
 2.1.3:
   api: 2.1.0
   state:
