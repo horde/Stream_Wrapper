@@ -2,7 +2,7 @@
 id: Stream_Wrapper
 name: Stream_Wrapper
 full: PHP stream wrappers library
-description: A collection of stream wrappers.
+description: A library of stream wrappers.
 list: dev
 type: library
 homepage: https://www.horde.org/libraries/Horde_Stream_Wrapper
