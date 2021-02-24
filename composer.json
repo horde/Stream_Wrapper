@@ -26,9 +26,11 @@
     ],
     "require": {
         "horde/horde-installer-plugin": "*",
-        "php": "^5.3 || ^7"
+        "php": "^7"
     },
-    "suggest": {},
+    "suggest": {
+        "horde/test": "^3"
+    },
     "autoload": {
         "psr-0": {
             "Horde_Stream_Wrapper": "lib/"
