@@ -11,6 +11,10 @@
  * @package    Stream_Wrapper
  * @subpackage UnitTests
  */
+namespace Horde\Stream;
+use \Wrapper;
+use PHPUnit\Framework\TestCase;
+use Horde_Stream_Wrapper_Combine;
 
 /**
  * Tests for the Combine wrapper.
@@ -23,7 +27,7 @@
  * @package    Stream_Wrapper
  * @subpackage UnitTests
  */
-class Horde_Stream_Wrapper_CombineTest extends PHPUnit_Framework_TestCase
+class CombineTest extends TestCase
 {
     public function testUsage()
     {

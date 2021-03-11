@@ -11,6 +11,10 @@
  * @package    Stream_Wrapper
  * @subpackage UnitTests
  */
+namespace Horde\Stream;
+use \Wrapper;
+use PHPUnit\Framework\TestCase;
+use Horde_Stream_Wrapper_String;
 
 /**
  * Tests for the String wrapper.
@@ -23,7 +27,7 @@
  * @package    Stream_Wrapper
  * @subpackage UnitTests
  */
-class Horde_Stream_Wrapper_StringTest extends PHPUnit_Framework_TestCase
+class StringTest extends TestCase
 {
     public function testUsage()
     {
