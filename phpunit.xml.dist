@@ -6,7 +6,7 @@
     </include>
   </coverage>
   <testsuites>
-    <testsuite name="horde/StreamWrapper">
+    <testsuite name="horde/Stream/Wrapper">
       <directory>test</directory>
     </testsuite>
   </testsuites>
