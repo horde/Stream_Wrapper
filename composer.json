@@ -1,4 +1,5 @@
 {
+    "minimum-stability": "dev",
     "name": "horde/stream_wrapper",
     "description": "PHP stream wrappers library",
     "type": "library",
@@ -27,11 +28,11 @@
         "php": "^7.4 || ^8"
     },
     "require-dev": {
-        "horde/log": "^3",
-        "horde/test": "^3"
+        "horde/log": "^3 || dev-FRAMEWORK_6_0",
+        "horde/test": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
-        "horde/log": "^3"
+        "horde/log": "^3 || dev-FRAMEWORK_6_0"
     },
     "autoload": {
         "psr-0": {
