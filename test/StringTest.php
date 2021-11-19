@@ -11,9 +11,11 @@
  * @package    Stream_Wrapper
  * @subpackage UnitTests
  */
+
 namespace Horde\Stream\Wrapper\Test;
+
 use PHPUnit\Framework\TestCase;
-use Horde_Stream_Wrapper_String;
+use Horde\Stream\Wrapper\StringWrapper;
 
 /**
  * Tests for the String wrapper.
@@ -32,7 +34,7 @@ class StringTest extends TestCase
     {
         $string = 'ABCDE12345fghij';
 
-        $stream = Horde_Stream_Wrapper_String::getStream($string);
+        $stream = StringWrapper::getStream($string);
 
         $this->assertEquals('ABCDE12345fghij', fread($stream, 1024));
         $this->assertEquals(true, feof($stream));
@@ -55,7 +57,7 @@ class StringTest extends TestCase
         $string = str_repeat('*', $bytes);
         $memoryUsage = memory_get_usage();
 
-        $stream = Horde_Stream_Wrapper_String::getStream($string);
+        $stream = StringWrapper::getStream($string);
         $memoryUsage2 = memory_get_usage();
         $this->assertLessThan($memoryUsage + $bytes, $memoryUsage2);
 
@@ -65,5 +67,4 @@ class StringTest extends TestCase
         $memoryUsage3 = memory_get_usage();
         $this->assertLessThan($memoryUsage + $bytes, $memoryUsage3);
     }
-
 }

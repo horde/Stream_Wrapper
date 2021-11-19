@@ -11,9 +11,11 @@
  * @package    Stream_Wrapper
  * @subpackage UnitTests
  */
+
 namespace Horde\Stream\Wrapper\Test;
+
 use PHPUnit\Framework\TestCase;
-use Horde_Stream_Wrapper_Combine;
+use Horde\Stream\Wrapper\CombineWrapper;
 
 /**
  * Tests for the Combine wrapper.
@@ -35,7 +37,7 @@ class CombineTest extends TestCase
 
         $data = array('ABCDE', $fp, 'fghij');
 
-        $stream = Horde_Stream_Wrapper_Combine::getStream($data);
+        $stream = CombineWrapper::getStream($data);
 
         $this->assertEquals('ABCDE12345fghij', fread($stream, 1024));
         $this->assertEquals(true, feof($stream));
