@@ -20,7 +20,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://horde-satis.maintaina.com"
+            "url": "https://horde-satis.maintaina.com/"
         }
     ],
     "require": {
@@ -45,6 +45,5 @@
         "psr-4": {
             "Horde\\Stream\\Wrapper\\Test\\": "test/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
