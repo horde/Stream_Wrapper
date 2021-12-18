@@ -3,7 +3,7 @@
  <name>Horde_Stream_Wrapper</name>
  <channel>pear.horde.org</channel>
  <summary>PHP stream wrappers library</summary>
- <description>A collection of stream wrappers.</description>
+ <description>A library of stream wrappers.</description>
  <lead>
   <name>Chuck Hagenbuch</name>
   <user>chuck</user>
@@ -16,7 +16,7 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2018-01-25</date>
+ <date>2021-12-18</date>
  <version>
   <release>2.1.5</release>
   <api>2.1.0</api>
@@ -27,7 +27,8 @@
  </stability>
  <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
  <notes>
-* 
+* [mjr] Fix PHP 8.0 ValueError (PR #1, rb@egroupware.org).
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -331,10 +332,11 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2018-01-25</date>
+   <date>2021-12-18</date>
    <license uri="http://www.horde.org/licenses/bsd">BSD-2-Clause</license>
    <notes>
-* 
+* [mjr] Fix PHP 8.0 ValueError (PR #1, rb@egroupware.org).
+* |+
    </notes>
   </release>
  </changelog>
