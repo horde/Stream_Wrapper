@@ -18,18 +18,10 @@
     ],
     "version": "2.1.6",
     "time": "2021-12-18",
-    "repositories": [
-        {
-            "type": "pear",
-            "url": "https://pear.horde.org"
-        }
-    ],
     "require": {
         "php": "^5.3 || ^7"
     },
     "replace": {
-        "pear-pear.horde.org/Horde_Stream_Wrapper": "2.*",
-        "pear-horde/Horde_Stream_Wrapper": "2.*"
     },
     "autoload": {
         "psr-0": {
