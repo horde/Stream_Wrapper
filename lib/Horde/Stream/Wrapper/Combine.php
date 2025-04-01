@@ -159,7 +159,7 @@ class Horde_Stream_Wrapper_Combine
     public function stream_read($count)
     {
         if ($this->stream_eof()) {
-            return false;
+            return "";
         }
 
         $out = '';
