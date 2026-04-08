@@ -28,8 +28,7 @@
         "php": "^7.4 || ^8"
     },
     "require-dev": {
-        "horde/log": "^3 || dev-FRAMEWORK_6_0",
-        "horde/test": "^3 || dev-FRAMEWORK_6_0"
+        "horde/log": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
         "horde/log": "^3 || dev-FRAMEWORK_6_0"
