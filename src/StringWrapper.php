@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you
  * did not receive this file, see http://www.horde.org/licenses/bsd.
@@ -100,10 +101,10 @@ class StringWrapper
         $opts = stream_context_get_options($this->context);
 
         if (isset($opts[self::WRAPPER_NAME]['string'])) {
-            $this->string =& $opts[self::WRAPPER_NAME]['string']->string;
+            $this->string = & $opts[self::WRAPPER_NAME]['string']->string;
         } elseif (isset($opts['horde-string']['string'])) {
             // @deprecated
-            $this->string =& $opts['horde-string']['string']->getString();
+            $this->string = & $opts['horde-string']['string']->getString();
         } else {
             throw new Exception('Use ' . __CLASS__ . '::getStream() to initialize the stream.');
         }
@@ -204,17 +205,17 @@ class StringWrapper
     {
         $pos = 0;
         switch ($whence) {
-        case SEEK_SET:
-            $pos = $offset;
-            break;
+            case SEEK_SET:
+                $pos = $offset;
+                break;
 
-        case SEEK_CUR:
-            $pos = $this->pos + $offset;
-            break;
+            case SEEK_CUR:
+                $pos = $this->pos + $offset;
+                break;
 
-        case SEEK_END:
-            $pos = strlen($this->string) + $offset;
-            break;
+            case SEEK_END:
+                $pos = strlen($this->string) + $offset;
+                break;
         }
 
         if (($pos < 0) || ($pos > strlen($this->string))) {

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2009-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2009-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you
  * did not receive this file, see http://www.horde.org/licenses/bsd.
@@ -317,20 +318,20 @@ class CombineWrapper
         $this->ateof = false;
 
         switch ($whence) {
-        case SEEK_SET:
-            $offset = $offset;
-            break;
+            case SEEK_SET:
+                $offset = $offset;
+                break;
 
-        case SEEK_CUR:
-            $offset = $this->position + $offset;
-            break;
+            case SEEK_CUR:
+                $offset = $this->position + $offset;
+                break;
 
-        case SEEK_END:
-            $offset = $this->length + $offset;
-            break;
+            case SEEK_END:
+                $offset = $this->length + $offset;
+                break;
 
-        default:
-            return false;
+            default:
+                return false;
         }
 
         $count = $this->position = min($this->length, $offset);
