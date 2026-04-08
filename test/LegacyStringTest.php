@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace Horde\Stream\Wrapper\Test;
 
+use Exception;
 use Horde_Stream_Wrapper_String;
+use Horde_Stream_Wrapper_StringStream;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
@@ -173,6 +175,100 @@ class LegacyStringTest extends TestCase
         $stream = Horde_Stream_Wrapper_String::getStream($string);
 
         $this->assertSame($string, fread($stream, 1024));
+
+        fclose($stream);
+    }
+
+    public function testDeprecatedStringStreamInterface(): void
+    {
+        // Ensure wrapper is registered
+        $init = 'x';
+        $tmp = Horde_Stream_Wrapper_String::getStream($init);
+        fclose($tmp);
+
+        $ob = new class implements Horde_Stream_Wrapper_StringStream {
+            public string $str = 'legacy-deprecated';
+
+            public function &getString()
+            {
+                return $this->str;
+            }
+        };
+
+        $ctx = stream_context_create([
+            'horde-string' => [
+                'string' => $ob,
+            ],
+        ]);
+
+        $stream = fopen(Horde_Stream_Wrapper_String::WRAPPER_NAME . '://deprecated', 'rb', false, $ctx);
+
+        $this->assertIsResource($stream);
+        $this->assertSame('legacy-deprecated', fread($stream, 1024));
+
+        fclose($stream);
+    }
+
+    public function testStreamOpenThrowsExceptionWithoutContext(): void
+    {
+        $init = 'x';
+        $tmp = Horde_Stream_Wrapper_String::getStream($init);
+        fclose($tmp);
+
+        $ctx = stream_context_create([
+            'unrelated' => ['foo' => 'bar'],
+        ]);
+
+        $this->expectException(Exception::class);
+
+        fopen(Horde_Stream_Wrapper_String::WRAPPER_NAME . '://no-ctx', 'rb', false, $ctx);
+    }
+
+    public function testStatReturnsCompleteStructure(): void
+    {
+        $string = 'test';
+        $stream = Horde_Stream_Wrapper_String::getStream($string);
+
+        $stat = fstat($stream);
+
+        $this->assertArrayHasKey('size', $stat);
+        $this->assertArrayHasKey('dev', $stat);
+        $this->assertArrayHasKey('blocks', $stat);
+        $this->assertSame(4, $stat['size']);
+
+        fclose($stream);
+    }
+
+    public function testCloseResetsState(): void
+    {
+        $string = 'data';
+        $stream = Horde_Stream_Wrapper_String::getStream($string);
+
+        fread($stream, 2);
+        fclose($stream);
+
+        $this->assertSame('', $string);
+    }
+
+    public function testSeekBeforeStartFails(): void
+    {
+        $string = 'ABCDE';
+        $stream = Horde_Stream_Wrapper_String::getStream($string);
+
+        $this->assertSame(-1, fseek($stream, -1, SEEK_SET));
+
+        fclose($stream);
+    }
+
+    public function testWriteExtendingString(): void
+    {
+        $string = 'ABC';
+        $stream = Horde_Stream_Wrapper_String::getStream($string);
+
+        fseek($stream, 0, SEEK_END);
+        fwrite($stream, 'DEF');
+
+        $this->assertSame('ABCDEF', $string);
 
         fclose($stream);
     }

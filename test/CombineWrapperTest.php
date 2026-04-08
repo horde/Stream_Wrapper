@@ -11,8 +11,10 @@ declare(strict_types=1);
 
 namespace Horde\Stream\Wrapper\Test;
 
+use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Horde\Stream\Wrapper\CombineStreamWrapper;
 use Horde\Stream\Wrapper\CombineWrapper;
 
 #[CoversClass(CombineWrapper::class)]
@@ -347,6 +349,179 @@ class CombineWrapperTest extends TestCase
 
         $stat = fstat($stream);
         $this->assertSame(6, $stat['size']);
+
+        fclose($stream);
+    }
+
+    public function testDeprecatedCombineStreamInterface(): void
+    {
+        // Ensure wrapper is registered
+        $tmp = CombineWrapper::getStream(['x']);
+        fclose($tmp);
+
+        $ob = new class implements CombineStreamWrapper {
+            public function getData(): array
+            {
+                return ['deprecated', '-combine'];
+            }
+        };
+
+        $ctx = stream_context_create([
+            'horde-combine' => [
+                'data' => $ob,
+            ],
+        ]);
+
+        $stream = fopen(CombineWrapper::WRAPPER_NAME . '://deprecated', 'rb', false, $ctx);
+
+        $this->assertIsResource($stream);
+        $this->assertSame('deprecated-combine', fread($stream, 1024));
+
+        fclose($stream);
+    }
+
+    public function testStreamOpenThrowsExceptionWithoutContext(): void
+    {
+        // Ensure wrapper is registered
+        $tmp = CombineWrapper::getStream(['x']);
+        fclose($tmp);
+
+        $ctx = stream_context_create([
+            'unrelated-key' => ['foo' => 'bar'],
+        ]);
+
+        $this->expectException(Exception::class);
+
+        fopen(CombineWrapper::WRAPPER_NAME . '://no-context', 'rb', false, $ctx);
+    }
+
+    public function testReadAfterEofReturnsEmptyString(): void
+    {
+        $stream = CombineWrapper::getStream(['test']);
+
+        fread($stream, 1024);
+        $this->assertTrue(feof($stream));
+
+        // Second read after EOF should return empty string
+        $this->assertSame('', fread($stream, 1024));
+
+        fclose($stream);
+    }
+
+    public function testSeekToSamePositionFails(): void
+    {
+        $stream = CombineWrapper::getStream(['ABCDE']);
+
+        // Stream starts at position 0, seeking to 0 means no change
+        // CombineWrapper::stream_seek returns false when oldpos == newpos
+        // fseek translates false to -1
+        $this->assertSame(-1, fseek($stream, 0, SEEK_SET));
+
+        fclose($stream);
+    }
+
+    public function testWriteWithinBoundsDoesNotExtendSize(): void
+    {
+        $stream = CombineWrapper::getStream(['ABCDEFGHIJ']);
+
+        fread($stream, 3);
+        fwrite($stream, 'XY');
+
+        $stat = fstat($stream);
+        $this->assertSame(10, $stat['size']);
+
+        fclose($stream);
+    }
+
+    public function testStatReturnsCompleteStructure(): void
+    {
+        $stream = CombineWrapper::getStream(['ABC', 'DEF']);
+
+        $stat = fstat($stream);
+
+        $this->assertArrayHasKey('dev', $stat);
+        $this->assertArrayHasKey('ino', $stat);
+        $this->assertArrayHasKey('mode', $stat);
+        $this->assertArrayHasKey('nlink', $stat);
+        $this->assertArrayHasKey('uid', $stat);
+        $this->assertArrayHasKey('gid', $stat);
+        $this->assertArrayHasKey('rdev', $stat);
+        $this->assertArrayHasKey('size', $stat);
+        $this->assertArrayHasKey('atime', $stat);
+        $this->assertArrayHasKey('mtime', $stat);
+        $this->assertArrayHasKey('ctime', $stat);
+        $this->assertArrayHasKey('blksize', $stat);
+        $this->assertArrayHasKey('blocks', $stat);
+        $this->assertSame(6, $stat['size']);
+        $this->assertSame(0, $stat['dev']);
+
+        fclose($stream);
+    }
+
+    public function testReadSingleComponent(): void
+    {
+        $fp = fopen('php://temp', 'r+');
+        fwrite($fp, 'only-stream');
+
+        $stream = CombineWrapper::getStream([$fp]);
+
+        $this->assertSame('only-stream', fread($stream, 1024));
+
+        fclose($stream);
+    }
+
+    public function testStatSizeUpdatesAfterWrite(): void
+    {
+        $stream = CombineWrapper::getStream(['ABC']);
+
+        $this->assertSame(3, fstat($stream)['size']);
+
+        fread($stream, 3);
+        fwrite($stream, 'DEFGH');
+
+        $this->assertSame(8, fstat($stream)['size']);
+
+        fclose($stream);
+    }
+
+    public function testReadExactBoundary(): void
+    {
+        $stream = CombineWrapper::getStream(['ABC', 'DEF']);
+
+        // Read exactly 3 bytes — ends at first component boundary
+        $this->assertSame('ABC', fread($stream, 3));
+        $this->assertSame(3, ftell($stream));
+
+        // Next read starts from second component
+        $this->assertSame('DEF', fread($stream, 3));
+
+        fclose($stream);
+    }
+
+    public function testEofClearedBySeek(): void
+    {
+        $stream = CombineWrapper::getStream(['ABCDE']);
+
+        fread($stream, 1024);
+        $this->assertTrue(feof($stream));
+
+        // Seek should clear EOF
+        fseek($stream, 3);
+        $this->assertFalse(feof($stream));
+
+        fclose($stream);
+    }
+
+    public function testTellAfterWrite(): void
+    {
+        $stream = CombineWrapper::getStream(['ABCDE']);
+
+        fread($stream, 2);
+        $this->assertSame(2, ftell($stream));
+
+        fwrite($stream, 'XY');
+        // PHP internally advances position by the return value of stream_write
+        $this->assertSame(4, ftell($stream));
 
         fclose($stream);
     }
