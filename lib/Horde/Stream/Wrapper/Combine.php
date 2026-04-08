@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2009-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2009-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you
  * did not receive this file, see http://www.horde.org/licenses/bsd.
@@ -24,7 +25,7 @@
 class Horde_Stream_Wrapper_Combine
 {
     /**/
-    const WRAPPER_NAME = 'horde-stream-wrapper-combine';
+    public const WRAPPER_NAME = 'horde-stream-wrapper-combine';
 
     /**
      * Context.
@@ -38,7 +39,7 @@ class Horde_Stream_Wrapper_Combine
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * The combined length of the stream.
@@ -95,11 +96,11 @@ class Horde_Stream_Wrapper_Combine
             self::WRAPPER_NAME . '://' . ++self::$_id,
             'wb',
             false,
-            stream_context_create(array(
-                self::WRAPPER_NAME => array(
-                    'data' => $data
-                )
-            ))
+            stream_context_create([
+                self::WRAPPER_NAME => [
+                    'data' => $data,
+                ],
+            ])
         );
     }
     /**
@@ -137,11 +138,11 @@ class Horde_Stream_Wrapper_Combine
             $length = ftell($fp);
             rewind($fp);
 
-            $this->_data[] = array(
+            $this->_data[] = [
                 'fp' => $fp,
                 'l' => $length,
-                'p' => 0
-            );
+                'p' => 0,
+            ];
 
             $this->_length += $length;
         }
@@ -252,7 +253,7 @@ class Horde_Stream_Wrapper_Combine
      */
     public function stream_stat()
     {
-        return array(
+        return [
             'dev' => 0,
             'ino' => 0,
             'mode' => 0,
@@ -265,8 +266,8 @@ class Horde_Stream_Wrapper_Combine
             'mtime' => 0,
             'ctime' => 0,
             'blksize' => 0,
-            'blocks' => 0
-        );
+            'blocks' => 0,
+        ];
     }
 
     /**
@@ -283,20 +284,20 @@ class Horde_Stream_Wrapper_Combine
         $this->_ateof = false;
 
         switch ($whence) {
-        case SEEK_SET:
-            $offset = $offset;
-            break;
+            case SEEK_SET:
+                $offset = $offset;
+                break;
 
-        case SEEK_CUR:
-            $offset = $this->_position + $offset;
-            break;
+            case SEEK_CUR:
+                $offset = $this->_position + $offset;
+                break;
 
-        case SEEK_END:
-            $offset = $this->_length + $offset;
-            break;
+            case SEEK_END:
+                $offset = $this->_length + $offset;
+                break;
 
-        default:
-            return false;
+            default:
+                return false;
         }
 
         $count = $this->_position = min($this->_length, $offset);

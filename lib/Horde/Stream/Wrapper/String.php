@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (BSD). If you
  * did not receive this file, see http://www.horde.org/licenses/bsd.
@@ -24,7 +25,7 @@
 class Horde_Stream_Wrapper_String
 {
     /**/
-    const WRAPPER_NAME = 'horde-stream-wrapper-string';
+    public const WRAPPER_NAME = 'horde-stream-wrapper-string';
 
     /**
      * The current context.
@@ -70,18 +71,18 @@ class Horde_Stream_Wrapper_String
         }
 
         /* Needed to keep reference. */
-        $ob = new stdClass;
+        $ob = new stdClass();
         $ob->string = &$string;
 
         return fopen(
             self::WRAPPER_NAME . '://' . ++self::$_id,
             'wb',
             false,
-            stream_context_create(array(
-                self::WRAPPER_NAME => array(
-                    'string' => $ob
-                )
-            ))
+            stream_context_create([
+                self::WRAPPER_NAME => [
+                    'string' => $ob,
+                ],
+            ])
         );
     }
 
@@ -93,10 +94,10 @@ class Horde_Stream_Wrapper_String
         $opts = stream_context_get_options($this->context);
 
         if (isset($opts[self::WRAPPER_NAME]['string'])) {
-            $this->_string =& $opts[self::WRAPPER_NAME]['string']->string;
+            $this->_string = & $opts[self::WRAPPER_NAME]['string']->string;
         } elseif (isset($opts['horde-string']['string'])) {
             // @deprecated
-            $this->_string =& $opts['horde-string']['string']->getString();
+            $this->_string = & $opts['horde-string']['string']->getString();
         } else {
             throw new Exception('Use ' . __CLASS__ . '::getStream() to initialize the stream.');
         }
@@ -163,7 +164,7 @@ class Horde_Stream_Wrapper_String
      */
     public function stream_stat()
     {
-        return array(
+        return [
             'dev' => 0,
             'ino' => 0,
             'mode' => 0,
@@ -176,8 +177,8 @@ class Horde_Stream_Wrapper_String
             'mtime' => 0,
             'ctime' => 0,
             'blksize' => 0,
-            'blocks' => 0
-        );
+            'blocks' => 0,
+        ];
     }
 
     /**
@@ -186,17 +187,17 @@ class Horde_Stream_Wrapper_String
     public function stream_seek($offset, $whence)
     {
         switch ($whence) {
-        case SEEK_SET:
-            $pos = $offset;
-            break;
+            case SEEK_SET:
+                $pos = $offset;
+                break;
 
-        case SEEK_CUR:
-            $pos = $this->_pos + $offset;
-            break;
+            case SEEK_CUR:
+                $pos = $this->_pos + $offset;
+                break;
 
-        case SEEK_END:
-            $pos = strlen($this->_string) + $offset;
-            break;
+            case SEEK_END:
+                $pos = strlen($this->_string) + $offset;
+                break;
         }
 
         if (($pos < 0) || ($pos > strlen($this->_string))) {
