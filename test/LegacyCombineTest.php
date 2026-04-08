@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace Horde\Stream\Wrapper\Test;
 
+use Exception;
 use Horde_Stream_Wrapper_Combine;
+use Horde_Stream_Wrapper_CombineStream;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
@@ -161,6 +163,107 @@ class LegacyCombineTest extends TestCase
         }
 
         $this->assertSame('ABCD', $result);
+
+        fclose($stream);
+    }
+
+    public function testDeprecatedCombineStreamInterface(): void
+    {
+        $tmp = Horde_Stream_Wrapper_Combine::getStream(['x']);
+        fclose($tmp);
+
+        $ob = new class implements Horde_Stream_Wrapper_CombineStream {
+            public function getData()
+            {
+                return ['legacy', '-deprecated'];
+            }
+        };
+
+        $ctx = stream_context_create([
+            'horde-combine' => [
+                'data' => $ob,
+            ],
+        ]);
+
+        $stream = fopen(Horde_Stream_Wrapper_Combine::WRAPPER_NAME . '://deprecated', 'rb', false, $ctx);
+
+        $this->assertIsResource($stream);
+        $this->assertSame('legacy-deprecated', fread($stream, 1024));
+
+        fclose($stream);
+    }
+
+    public function testStreamOpenThrowsExceptionWithoutContext(): void
+    {
+        $tmp = Horde_Stream_Wrapper_Combine::getStream(['x']);
+        fclose($tmp);
+
+        $ctx = stream_context_create([
+            'unrelated' => ['foo' => 'bar'],
+        ]);
+
+        $this->expectException(Exception::class);
+
+        fopen(Horde_Stream_Wrapper_Combine::WRAPPER_NAME . '://no-ctx', 'rb', false, $ctx);
+    }
+
+    public function testSeekToSamePositionFails(): void
+    {
+        $stream = Horde_Stream_Wrapper_Combine::getStream(['ABCDE']);
+
+        $this->assertSame(-1, fseek($stream, 0, SEEK_SET));
+
+        fclose($stream);
+    }
+
+    public function testStatReturnsCompleteStructure(): void
+    {
+        $stream = Horde_Stream_Wrapper_Combine::getStream(['ABC', 'DEF']);
+
+        $stat = fstat($stream);
+
+        $this->assertArrayHasKey('size', $stat);
+        $this->assertArrayHasKey('dev', $stat);
+        $this->assertArrayHasKey('blocks', $stat);
+        $this->assertSame(6, $stat['size']);
+
+        fclose($stream);
+    }
+
+    public function testReadAfterEofReturnsEmpty(): void
+    {
+        $stream = Horde_Stream_Wrapper_Combine::getStream(['test']);
+
+        fread($stream, 1024);
+        $this->assertTrue(feof($stream));
+
+        $result = fread($stream, 1024);
+        $this->assertEmpty($result);
+
+        fclose($stream);
+    }
+
+    public function testWriteWithinBoundsDoesNotExtendSize(): void
+    {
+        $stream = Horde_Stream_Wrapper_Combine::getStream(['ABCDEFGHIJ']);
+
+        fread($stream, 3);
+        fwrite($stream, 'XY');
+
+        $this->assertSame(10, fstat($stream)['size']);
+
+        fclose($stream);
+    }
+
+    public function testEofClearedBySeek(): void
+    {
+        $stream = Horde_Stream_Wrapper_Combine::getStream(['ABCDE']);
+
+        fread($stream, 1024);
+        $this->assertTrue(feof($stream));
+
+        fseek($stream, 3);
+        $this->assertFalse(feof($stream));
 
         fclose($stream);
     }

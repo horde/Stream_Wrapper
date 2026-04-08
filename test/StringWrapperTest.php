@@ -11,9 +11,10 @@ declare(strict_types=1);
 
 namespace Horde\Stream\Wrapper\Test;
 
+use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Horde\Stream\Wrapper\StringStreamWrapper;
 use Horde\Stream\Wrapper\StringWrapper;
 
 #[CoversClass(StringWrapper::class)]
@@ -384,6 +385,173 @@ class StringWrapperTest extends TestCase
         $this->assertSame(0, fseek($stream, -3, SEEK_END));
         $this->assertSame(7, ftell($stream));
         $this->assertSame('HIJ', fread($stream, 3));
+
+        fclose($stream);
+    }
+
+    public function testDeprecatedStringStreamInterface(): void
+    {
+        // Ensure wrapper is registered
+        $init = 'x';
+        $tmp = StringWrapper::getStream($init);
+        fclose($tmp);
+
+        $ob = new class implements StringStreamWrapper {
+            public string $str = 'deprecated-path-data';
+
+            public function &getString(): string
+            {
+                return $this->str;
+            }
+        };
+
+        $ctx = stream_context_create([
+            'horde-string' => [
+                'string' => $ob,
+            ],
+        ]);
+
+        $stream = fopen(StringWrapper::WRAPPER_NAME . '://deprecated', 'rb', false, $ctx);
+
+        $this->assertIsResource($stream);
+        $this->assertSame('deprecated-path-data', fread($stream, 1024));
+
+        fclose($stream);
+    }
+
+    public function testStreamOpenThrowsExceptionWithoutContext(): void
+    {
+        // Ensure wrapper is registered
+        $init = 'x';
+        $tmp = StringWrapper::getStream($init);
+        fclose($tmp);
+
+        $ctx = stream_context_create([
+            'unrelated-key' => ['foo' => 'bar'],
+        ]);
+
+        $this->expectException(Exception::class);
+
+        fopen(StringWrapper::WRAPPER_NAME . '://no-context', 'rb', false, $ctx);
+    }
+
+    public function testStatReturnsCompleteStructure(): void
+    {
+        $string = 'ABCDE';
+        $stream = StringWrapper::getStream($string);
+
+        $stat = fstat($stream);
+
+        $this->assertArrayHasKey('dev', $stat);
+        $this->assertArrayHasKey('ino', $stat);
+        $this->assertArrayHasKey('mode', $stat);
+        $this->assertArrayHasKey('nlink', $stat);
+        $this->assertArrayHasKey('uid', $stat);
+        $this->assertArrayHasKey('gid', $stat);
+        $this->assertArrayHasKey('rdev', $stat);
+        $this->assertArrayHasKey('size', $stat);
+        $this->assertArrayHasKey('atime', $stat);
+        $this->assertArrayHasKey('mtime', $stat);
+        $this->assertArrayHasKey('ctime', $stat);
+        $this->assertArrayHasKey('blksize', $stat);
+        $this->assertArrayHasKey('blocks', $stat);
+        $this->assertSame(5, $stat['size']);
+        $this->assertSame(0, $stat['dev']);
+
+        fclose($stream);
+    }
+
+    public function testStatSizeUpdatesAfterWrite(): void
+    {
+        $string = 'ABC';
+        $stream = StringWrapper::getStream($string);
+
+        $this->assertSame(3, fstat($stream)['size']);
+
+        fseek($stream, 0, SEEK_END);
+        fwrite($stream, 'DEF');
+
+        $this->assertSame(6, fstat($stream)['size']);
+
+        fclose($stream);
+    }
+
+    public function testCloseResetsState(): void
+    {
+        $string = 'test data';
+        $stream = StringWrapper::getStream($string);
+
+        fread($stream, 4);
+        $this->assertSame(4, ftell($stream));
+
+        fclose($stream);
+
+        // After close, the original variable is cleared via stream_close
+        // (stream_close sets string to '' and pos to 0)
+        // Verify that string was cleared by the reference semantics
+        $this->assertSame('', $string);
+    }
+
+    public function testReadBeyondLength(): void
+    {
+        $string = 'short';
+        $stream = StringWrapper::getStream($string);
+
+        // Read much more than available
+        $result = fread($stream, 100000);
+
+        $this->assertSame('short', $result);
+        $this->assertTrue(feof($stream));
+
+        fclose($stream);
+    }
+
+    public function testWriteOverwriteMiddle(): void
+    {
+        $string = '0123456789';
+        $stream = StringWrapper::getStream($string);
+
+        fseek($stream, 3);
+        fwrite($stream, 'XX');
+
+        $this->assertSame('012XX56789', $string);
+
+        fclose($stream);
+    }
+
+    public function testSeekCurFromEndPosition(): void
+    {
+        $string = 'ABCDE';
+        $stream = StringWrapper::getStream($string);
+
+        fseek($stream, 0, SEEK_END);
+        // Seek back 2 from end position
+        $this->assertSame(0, fseek($stream, -2, SEEK_CUR));
+        $this->assertSame(3, ftell($stream));
+        $this->assertSame('DE', fread($stream, 2));
+
+        fclose($stream);
+    }
+
+    public function testSeekEndPositiveOffset(): void
+    {
+        $string = 'ABCDE';
+        $stream = StringWrapper::getStream($string);
+
+        // SEEK_END with positive offset goes beyond string length
+        $this->assertSame(-1, fseek($stream, 1, SEEK_END));
+
+        fclose($stream);
+    }
+
+    public function testSingleCharString(): void
+    {
+        $string = 'X';
+        $stream = StringWrapper::getStream($string);
+
+        $this->assertSame('X', fread($stream, 1));
+        $this->assertSame(1, ftell($stream));
+        $this->assertTrue(feof($stream));
 
         fclose($stream);
     }
