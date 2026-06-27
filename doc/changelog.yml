@@ -1,56 +1,14 @@
 ---
-3.0.0alpha5:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-11-19
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |+
-3.0.0alpha4:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-11-19
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |
-    [rla] Upgraded to namespaced code complying with PSR-12 und PHPStan level 8.
-    |+
-3.0.0alpha3:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-03-13
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |+
-3.0.0alpha2:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-02-24
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |+
-3.0.0alpha1:
-  api: 3.0.0alpha1
+3.0.0:
+  api: 3.0.0
   state:
     release: stable
     api: stable
-  date: 2021-02-24
+  date: 2026-06-27
   license:
     identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |+
+    uri: https://spdx.org/licenses/BSD-2-Clause.html
+  notes: "chore: refresh qc fixes and platform deps\nchore: Update workflow dependency"
 3.0.0-beta1:
   api: 3.0.0-beta1
   state:
@@ -60,15 +18,57 @@
   license:
     identifier: BSD-2-Clause
     uri: https://spdx.org/licenses/BSD-2-Clause.html
-  notes: |-
-    test: Improve coverage for StringWrapper
-    style: php-cs-fixer
-    chore: metadata
-    Merge pull request #3 from prigaux/patch-1
-    stream_read must return "" on eof (false means error)
-    fix PHP 8.0 ValueError: fread(): Argument #2 ($length) must be greater than 0
-    Update metadata and workflows for PHP 8 support
-    Development mode for Stream_Wrapper-3.0.0alpha5
+  notes: "test: Improve coverage for StringWrapper\nstyle: php-cs-fixer\nchore: metadata\nMerge pull request #3 from prigaux/patch-1\nstream_read must return \"\" on eof (false means error)\nfix PHP 8.0 ValueError: fread(): Argument #2 ($length) must be greater than 0\nUpdate metadata and workflows for PHP 8 support\nDevelopment mode for Stream_Wrapper-3.0.0alpha5"
+3.0.0alpha5:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-11-19
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: ''
+3.0.0alpha4:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-11-19
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: "[rla] Upgraded to namespaced code complying with PSR-12 und PHPStan level 8.\n|+\n"
+3.0.0alpha3:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-03-13
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: ''
+3.0.0alpha2:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-02-24
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: ''
+3.0.0alpha1:
+  api: 3.0.0alpha1
+  state:
+    release: stable
+    api: stable
+  date: 2021-02-24
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: ''
 2.1.4:
   api: 2.1.0
   state:
@@ -78,9 +78,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |+
-    [jan] Fix deprecation warnings in PHP 7.2.
-    
+  notes: "[jan] Fix deprecation warnings in PHP 7.2.\n\n"
 2.1.3:
   api: 2.1.0
   state:
@@ -90,8 +88,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    [jan] Mark PHP 7 as supported.
+  notes: "[jan] Mark PHP 7 as supported.\n"
 2.1.2:
   api: 2.1.0
   state:
@@ -101,8 +98,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    [mms] Fix possible infinite loop when reading from a combined stream.
+  notes: "[mms] Fix possible infinite loop when reading from a combined stream.\n"
 2.1.1:
   api: 2.1.0
   state:
@@ -112,8 +108,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    [jan] Improve PSR-2 compatibility.
+  notes: "[jan] Improve PSR-2 compatibility.\n"
 2.1.0:
   api: 2.1.0
   state:
@@ -123,11 +118,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    [mms] Add unit tests.
-    [mms] Add Horde_Stream_Wrapper_Combine::getStream().
-    [mms] Add Horde_Stream_Wrapper_String::getStream().
-    [mms] Fix documentation regarding proper license for this package (BSD).
+  notes: "[mms] Add unit tests.\n[mms] Add Horde_Stream_Wrapper_Combine::getStream().\n[mms] Add Horde_Stream_Wrapper_String::getStream().\n[mms] Fix documentation regarding proper license for this package (BSD).\n"
 2.0.1:
   api: 1.0.0
   state:
@@ -137,30 +128,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    [jan] Re-packaged 2.0.0 release.
-2.0.0beta1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: stable
-  date: 2012-07-19
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |
-    First beta release for Horde 5.
-2.0.0alpha1:
-  api: 1.0.0
-  state:
-    release: alpha
-    api: stable
-  date: 2012-07-06
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |
-    First alpha release for Horde 5.
+  notes: "[jan] Re-packaged 2.0.0 release.\n"
 2.0.0:
   api: 1.0.0
   state:
@@ -170,8 +138,27 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    First stable release for Horde 5.
+  notes: "First stable release for Horde 5.\n"
+2.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2012-07-19
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: "First beta release for Horde 5.\n"
+2.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: stable
+  date: 2012-07-06
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: "First alpha release for Horde 5.\n"
 1.0.1:
   api: 1.0.0
   state:
@@ -181,52 +168,7 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    [rla] Add license file.
-1.0.0beta1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-16
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |
-    First beta release for Horde 4.
-1.0.0alpha1:
-  api: 1.0.0
-  state:
-    release: alpha
-    api: alpha
-  date: 2011-03-08
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |
-    First alpha release for Horde 4.
-1.0.0RC2:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-29
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |
-    Second release candidate for Horde 4.
-1.0.0RC1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-22
-  license:
-    identifier: BSD-2-Clause
-    uri: http://www.horde.org/licenses/bsd
-  notes: |
-    First release candidate for Horde 4.
+  notes: "[rla] Add license file.\n"
 1.0.0:
   api: 1.0.0
   state:
@@ -236,5 +178,44 @@
   license:
     identifier: BSD-2-Clause
     uri: http://www.horde.org/licenses/bsd
-  notes: |
-    First stable release for Horde 4.
+  notes: "First stable release for Horde 4.\n"
+1.0.0RC2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: "Second release candidate for Horde 4.\n"
+1.0.0RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-22
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: "First release candidate for Horde 4.\n"
+1.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-16
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: "First beta release for Horde 4.\n"
+1.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: alpha
+  date: 2011-03-08
+  license:
+    identifier: BSD-2-Clause
+    uri: http://www.horde.org/licenses/bsd
+  notes: "First alpha release for Horde 4.\n"
